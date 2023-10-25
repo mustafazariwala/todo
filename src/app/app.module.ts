@@ -8,6 +8,9 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { CardsListComponent } from './cards/cards-list/cards-list.component';
 import { CardComponent } from './cards/card/card.component';
 
+// 3rd Party Modules  
+import { DndModule } from 'ngx-drag-drop';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,7 +21,8 @@ import { CardComponent } from './cards/card/card.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    DndModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,5 +1,24 @@
-<div class="row row-cols-1 row-cols-md-3 g-4">
-  <div class="col" *ngFor="let card of cards">
-    <app-card [cardData]="card"></app-card>
+<div 
+  class="row row-cols-1 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 g-4 dndList"
+  [dndDropzone]="['banana']"
+  (dndDrop)="onDrop($event, cards)"
+  dndEffectAllowed="move"
+>
+  <div class="col" dndPlaceholderRef>
+    <div class="card mx-auto" >
+      <div class="card-body">
+        <h5 class="card-title"> </h5>
+        <p class="card-text"> </p>
+      </div>
+    </div>
+  </div>
+  <div 
+  class="col"
+  *ngFor="let item of cards; let i = index; trackBy: trackByFruit"
+  [dndDraggable]="item"
+  [dndType]="item.type"
+  (dndMoved)="onDragged(i, item, cards)"
+  dndEffectAllowed="move">
+    <app-card [cardData]="item"></app-card>
   </div>
 </div>

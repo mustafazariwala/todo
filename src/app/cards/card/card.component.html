@@ -1,6 +1,12 @@
-<div class="card" [ngClass]="cardData.styleClass">
+<div class="card mx-auto" [ngClass]="cardData.styleClass">
   <div class="card-body">
-    <h5 class="card-title">{{cardData.title}}</h5>
-    <p class="card-text">{{cardData.body}}</p>
+    <h5 class="card-title" [ngClass]="{'onHoverTitle': !titleClicked}" (click)="titleClicked = true">
+      <span *ngIf="!titleClicked">{{cardData.title}}</span>
+      <input type="text" *ngIf="titleClicked" class="form-control" value="{{cardData.title}}">
+    </h5>
+    <p class="card-text"  [ngClass]="{'onHoverBody': !titleClicked}" (click)="bodyClicked = true">
+      <span *ngIf="!bodyClicked">{{cardData.body}}</span>
+      <textarea *ngIf="bodyClicked" class="form-control" value="{{cardData.body}}" rows="5"></textarea>
+    </p>
   </div>
 </div>

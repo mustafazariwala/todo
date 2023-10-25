@@ -1,0 +1,19 @@
+.dndList {
+  transition: all 300ms ease;
+  /* padding: 5px; */
+}
+
+.dndDragging {
+  border: 1px dotted gray;
+  padding: 10px;
+  background-color: gainsboro;
+}
+
+.dndDraggingSource {
+  display: none;
+}
+.card{
+  width: 100%;
+  max-width: 250px;
+  height: 200px;
+}
