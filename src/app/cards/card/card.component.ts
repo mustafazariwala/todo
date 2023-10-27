@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { DbService } from 'src/app/services/db.service';
 
 
 @Component({
@@ -10,10 +11,30 @@ export class CardComponent implements OnInit {
   titleClicked = false;
   bodyClicked = false;
 
-  @Input() cardData: any = {};
+  constructor(
+    private dbService: DbService
+  ){
 
-  ngOnInit(): void {
   }
 
+  @Input() cardData: any = {};
+
+  card = {
+    title: '',
+    body: '',
+    styleClass: []
+  };
+
+  ngOnInit(): void {
+    // console.log(this.cardData.id)
+    this.getCard();
+  };
+
+  getCard(){
+    this.dbService.readDataFromDB(`cards/${this.cardData.id}`, true).subscribe((data:any) => { 
+      console.log(data)
+      this.card = data;
+    });
+  }
 
 }

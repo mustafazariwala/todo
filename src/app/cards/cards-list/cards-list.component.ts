@@ -9,6 +9,7 @@ import {
   DropEffect,
   EffectAllowed,
 } from 'ngx-drag-drop';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @Component({
   selector: 'app-cards-list',
@@ -17,50 +18,29 @@ import {
 })
 export class CardsListComponent implements OnInit {
 
-  constructor(private dbService: DbService) { }
+  constructor(
+    private dbService: DbService,
+    private localStorageService: LocalStorageService
+  ) { }
 
   ngOnInit(): void {
-    this.readCardData();
+    this.readSessionKeyData();
   }
 
   cards = [];
+  session:any = {cards:[]};
 
-  draggableListLeft: any[] = [
-    {
-      content: 'Test 1',
-      effectAllowed: 'move',
-      disable: false
-    },
-    {
-      content: 'Test 2',
-      effectAllowed: 'move',
-      disable: false
-    },
-    {
-      content: 'Test 3',
-      effectAllowed: 'move',
-      disable: false
-    },
-    {
-      content: 'Test 4',
-      effectAllowed: 'move',
-      disable: false
-    }
-  ];
-
-  layout = {
-    dndHorizontal: true,
-  };
 
   trackByFruit(index: number, fruit: any) {
     return fruit;
   }
 
   
-  readCardData(){
-    this.dbService.readDataFromDB('cards').subscribe((data:any) => {
-      this.cards = data;
-      console.log(this.cards)
+  readSessionKeyData(){
+    this.dbService.readDataFromDB('sessions', true).subscribe((data:any) => {
+      let ObjectKeys = Object.values(data);
+      this.session = ObjectKeys.find((session:any) => session.sessionKey === this.localStorageService.GetKey());
+      this.cards = this.session.cards
     });
   };
 
@@ -74,12 +54,14 @@ export class CardsListComponent implements OnInit {
       `onDragged ngFor-index=${index}, item=${fruit}, removeIndex=${removeIndex}, list=${list.length}`
     );
     list.splice(removeIndex, 1);
+        this.dbService.updateDatatoDB({cards: list}, `sessions/${this.session.id}`)
   }
 
   onDragEnd(event: DragEvent) {
     console.log('drag ended')
   }
-  onDrop(event: DndDropEvent, list) {
+  async onDrop(event: DndDropEvent, list) {
+    // console.log(list)
     if (list && (event.dropEffect === 'copy' || event.dropEffect === 'move')) {
       let index = event.index;
 
@@ -88,6 +70,7 @@ export class CardsListComponent implements OnInit {
       }
 
       list.splice(index, 0, event.data);
+      // console.log(list)
     }
   }
 }

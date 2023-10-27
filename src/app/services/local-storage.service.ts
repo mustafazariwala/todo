@@ -7,11 +7,22 @@ export class LocalStorageService {
 
   constructor() { }
 
-  GetNewSessionKey() {
-    const key = this.generateRandomString(6);
-    localStorage.setItem('sessionKey', key);
-    return key;
+  key = null;
+
+  GetKey(){
+    return this.key
   }
+
+  GetNewSessionKey() {
+    this.key = this.generateRandomString(6);
+    localStorage.setItem('sessionKey', this.key);
+    return this.key;
+  }
+
+  GetExistingStorageKey() {
+    this.key = localStorage.getItem('sessionKey');
+    return this.key;
+  };
 
   generateRandomString(length) {
     const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -20,6 +31,6 @@ export class LocalStorageService {
      const randomIndex = Math.floor(Math.random() * characters.length);
      result += characters[randomIndex];
     }
-    return result;
+    return result.replace(/(.{3})(.{3})/g, '$1-$2');
    }
 }
