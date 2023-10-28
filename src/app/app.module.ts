@@ -10,6 +10,8 @@ import { CardComponent } from './cards/card/card.component';
 
 // 3rd Party Modules  
 import { DndModule } from 'ngx-drag-drop';
+import { HomeBarComponent } from './home-bar/home-bar.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,10 +19,12 @@ import { DndModule } from 'ngx-drag-drop';
     HomeComponent,
     NavbarComponent,
     CardsListComponent,
-    CardComponent
+    CardComponent,
+    HomeBarComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     AppRoutingModule,
     DndModule
   ],

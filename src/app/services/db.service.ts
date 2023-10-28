@@ -7,6 +7,7 @@ import {
   update,
   push,
   child,
+  runTransaction
 } from 'firebase/database'
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -16,18 +17,20 @@ import { environment } from 'src/environments/environment';
 })
 export class DbService {
 
+  sessionId = null;
+
   constructor() { }
 
   app = initializeApp(environment.firebaseConfig);
   db = getDatabase(this.app);
 
-  saveDatatoDB(data:any, route: string) {
-    const key = push(child(ref(this.db), route)).key;
+  async saveDatatoDB(data:any, route: string) {
+    const key = await push(child(ref(this.db), route)).key;
     let changeData = {
       ...data,
       id: key,
     };
-    update(ref(this.db, `${route}/${key}`), changeData).then((response) => {
+    return update(ref(this.db, `${route}/${key}`), changeData).then((response) => {
       console.log(response)
       return {
         response: response,
@@ -37,7 +40,6 @@ export class DbService {
   };
 
   updateDatatoDB(data:any, route: string) {
-    console.log(data)
     update(ref(this.db, `${route}`), data).then((response) => {
       console.log(response)
       return response
@@ -64,6 +66,15 @@ export class DbService {
       });
       return obs;
     }
+  }
+
+  runDBTransaction(route:string, dataManupulation:any){
+    runTransaction(ref(this.db, route), (currentData) => {
+      if(currentData){
+        return dataManupulation(currentData)
+      }
+      return currentData
+    })
   }
 
   firebaseKeyGen(){

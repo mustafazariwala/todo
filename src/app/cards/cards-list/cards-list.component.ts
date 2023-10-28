@@ -37,10 +37,10 @@ export class CardsListComponent implements OnInit {
 
   
   readSessionKeyData(){
-    this.dbService.readDataFromDB('sessions', true).subscribe((data:any) => {
+    this.dbService.readDataFromDB('sessions').subscribe((data:any) => {
       let ObjectKeys = Object.values(data);
       this.session = ObjectKeys.find((session:any) => session.sessionKey === this.localStorageService.GetKey());
-      this.cards = this.session.cards
+      if(!this.cards.length) this.cards = this.session.cards
     });
   };
 

@@ -2,11 +2,11 @@
   <div class="card-body">
     <h5 class="card-title" [ngClass]="{'onHoverTitle': !titleClicked}" (click)="titleClicked = true">
       <span *ngIf="!titleClicked">{{card.title}}</span>
-      <input type="text" *ngIf="titleClicked" class="form-control" value="{{card.title}}">
+      <input placeholder="Title" type="text" *ngIf="titleClicked" class="form-control" [(ngModel)]="card.title" (blur)="onUpdateCard('title',$event)" (keyup.enter)="onUpdateCard('title',$event)" />
     </h5>
-    <p class="card-text"  [ngClass]="{'onHoverBody': !titleClicked}" (click)="bodyClicked = true">
+    <p class="card-text"  [ngClass]="{'onHoverBody': !titleClicked}" (click)="bodyClicked = true" >
       <span *ngIf="!bodyClicked">{{card.body}}</span>
-      <textarea *ngIf="bodyClicked" class="form-control" value="{{card.body}}" rows="5"></textarea>
+      <textarea placeholder="Body" *ngIf="bodyClicked" class="form-control" [(ngModel)]="card.body" rows="5" (blur)="onUpdateCard('body',$event)" (keyup.enter)="onUpdateCard('body',$event)"></textarea>
     </p>
   </div>
 </div>

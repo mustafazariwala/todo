@@ -25,6 +25,8 @@ export class CardComponent implements OnInit {
     styleClass: []
   };
 
+  myModel:any;
+
   ngOnInit(): void {
     // console.log(this.cardData.id)
     this.getCard();
@@ -32,9 +34,25 @@ export class CardComponent implements OnInit {
 
   getCard(){
     this.dbService.readDataFromDB(`cards/${this.cardData.id}`, true).subscribe((data:any) => { 
-      console.log(data)
       this.card = data;
+      this.checkCardDetails()
     });
+
+  }
+
+
+  checkCardDetails(){
+    if(this.card.title.trim() == '') this.titleClicked = true;
+    // console.log(this.card.title.trim())
+    if(this.card.body.trim() == '') this.bodyClicked = true;
+  }
+
+
+  onUpdateCard(type, $event:any){
+    if(type === 'title') this.titleClicked = false;
+    if(type === 'body') this.bodyClicked = false;
+    let result = this.dbService.updateDatatoDB(this.card, `cards/${this.cardData.id}`);
+    console.log(result)
   }
 
 }

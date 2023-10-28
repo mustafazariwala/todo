@@ -1,16 +1,32 @@
 import { Injectable } from '@angular/core';
+import { DbService } from './db.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalStorageService {
 
-  constructor() { }
+  constructor(
+    private dbService: DbService,
+  ) { }
 
   key = null;
+  sessionId = null;
 
   GetKey(){
     return this.key
+  }
+
+  getSessionId(){
+    if(!this.sessionId) {
+      this.dbService.readDataFromDB('sessions').subscribe((data:any) => {
+        let ObjectKeys = Object.values(data);
+        let session:any = ObjectKeys.find((session:any) => session.sessionKey === this.GetKey());
+        this.sessionId = session.id;
+        return this.sessionId
+      });
+    }
+    return this.sessionId
   }
 
   GetNewSessionKey() {
