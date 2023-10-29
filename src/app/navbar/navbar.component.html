@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md bg-body-tertiary">
+<nav class="navbar navbar-expand-sm bg-body-tertiary">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Lets Todo</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -7,10 +7,57 @@
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         </ul>
-        <form class="d-flex" role="search">
           <input class="form-control me-2" type="search" placeholder={{sessionKey}} aria-label="Search" disabled>
-          <button class="btn btn-outline-success" type="submit">Join</button>
-        </form>
+          <button class="btn btn-outline-success" type="submit" (click)="openJoinModal(join)" *ngIf="!authService.UserData">Join</button>
+          <button class="btn btn-outline-success" type="submit" (click)="authService.Logout()" *ngIf="authService.UserData">Logout</button>
       </div>
     </div>
 </nav>
+
+<ng-template #join>
+  <div class="modal-header">
+    <h3 class="modal-title" *ngIf="signUporLogin == 'signup'">Signup</h3>
+    <h3 class="modal-title" *ngIf="signUporLogin == 'login'">Login</h3>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div  *ngIf="signUporLogin == 'signup'">
+      <form [formGroup]="signupForm" (ngSubmit)="onSignup()">
+        <div class="mb-3">
+          <label for="name" class="form-label">Name</label>
+          <input type="text" class="form-control" formControlName="name">
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label" >Email</label>
+          <input type="email" class="form-control" formControlName="email">
+        </div>
+        <div class="mb-4">
+          <label for="password" class="form-label">password</label>
+          <input type="password" class="form-control" formControlName="password">
+        </div>
+        <div class="mb-4">
+          <button class="btn btn-primary" type="submit">Register</button>
+        </div>
+      </form>
+      <p>Already have an account. <a href="" (click)="$event.preventDefault(); signUporLogin = 'login'">Login</a> Instead</p>
+    </div>
+    <div *ngIf="signUporLogin == 'login'">
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <div class="mb-4">
+          <label for="email" class="form-label" >Email</label>
+          <input type="email" class="form-control" formControlName="email">
+        </div>
+        <div class="mb-4">
+          <label for="password" class="form-label">password</label>
+          <input type="password" class="form-control" formControlName="password">
+        </div>
+        <div class="mb-4">
+          <button class="btn btn-primary" type="submit">Login</button>
+        </div>
+      </form>
+      <p>Lets do a Quick <a href="" (click)="$event.preventDefault(); signUporLogin = 'signup'">Signup</a></p>
+    </div>
+  </div>
+</ng-template>
