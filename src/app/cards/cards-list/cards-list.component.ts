@@ -40,7 +40,7 @@ export class CardsListComponent implements OnInit {
     this.dbService.readDataFromDB('sessions').subscribe((data:any) => {
       let ObjectKeys = Object.values(data);
       this.session = ObjectKeys.find((session:any) => session.sessionKey === this.localStorageService.GetKey());
-      if(!this.cards.length) this.cards = this.session.cards
+      if(this.cards.length != this.session.cards.length) this.cards = this.session.cards
     });
   };
 
@@ -54,7 +54,7 @@ export class CardsListComponent implements OnInit {
       `onDragged ngFor-index=${index}, item=${fruit}, removeIndex=${removeIndex}, list=${list.length}`
     );
     list.splice(removeIndex, 1);
-        this.dbService.updateDatatoDB({cards: list}, `sessions/${this.session.id}`)
+    this.dbService.updateDatatoDB({cards: list}, `sessions/${this.session.id}`)
   }
 
   onDragEnd(event: DragEvent) {

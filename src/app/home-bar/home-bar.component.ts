@@ -27,11 +27,9 @@ export class HomeBarComponent {
     let sessionId = await this.localStorageService.getSessionId()
     console.log(newCard)
     this.dbService.runDBTransaction(`sessions/${sessionId}`, (session)=> {
-      if(session && session.cards && Array.isArray(session.cards)) {
-        session.cards.push({id: newCard.key})
-        return session
-      }
-      return session
+      let cards = session.cards || [];
+      cards.push({id: newCard.key})
+      return {...session, cards: cards}
     });
   };
 
