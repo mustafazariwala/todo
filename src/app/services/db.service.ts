@@ -19,7 +19,9 @@ export class DbService {
 
   sessionId = null;
 
-  constructor() { }
+  constructor() {
+    console.log(environment)
+  }
 
   app = initializeApp(environment.firebaseConfig);
   db = getDatabase(this.app);
